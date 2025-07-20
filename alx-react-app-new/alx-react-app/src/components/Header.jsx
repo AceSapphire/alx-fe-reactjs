@@ -1,6 +1,6 @@
-import React from 'react'
+// src/components/Header.jsx
 
-function Header () {
+function Header() {
     return (
         <header style={{ backgroundColor: 'navy', color: 'white', textAlign: 'center' }}>
             <h1>My Favorite Cities</h1>
