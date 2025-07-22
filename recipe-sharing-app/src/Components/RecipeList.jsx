@@ -15,4 +15,4 @@ const RecipeList = () => {
         </div>
     );
 };
-export default RecipeList
+export default RecipeList;
