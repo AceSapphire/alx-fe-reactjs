@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './App.css';
+import Search from './components/Search';
 import UserCard from './components/UserCard';
 
 function App() {
@@ -27,16 +28,12 @@ function App() {
   return (
     <div className="App">
       <h1>GitHub User Search</h1>
-      <input
-        type="text"
-        placeholder="Enter GitHub username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+      <Search
+        username={username}
+        setUsername={setUsername}
+        handleSearch={handleSearch}
       />
-      <button onClick={handleSearch}>Search</button>
-
       {error && <p style={{ color: 'red' }}>{error}</p>}
-
       <UserCard user={user} />
     </div>
   );
