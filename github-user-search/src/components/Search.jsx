@@ -1,50 +1,48 @@
-import React, { useState } from 'react';
-import fetchUserData from '../services/githubService';
-import UserCard from './UserCard';
+import { useState } from 'react';
 
-function SearchForm() {
+function Search() {
   const [username, setUsername] = useState('');
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState(null);
   const [error, setError] = useState('');
 
-  const handleInputChange = (e) => {
-    setUsername(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleSearch = async () => {
     setError('');
-    setUserData(null);
+    setUser(null);
 
     try {
-      const data = await fetchUserData(username);
-      setUserData(data);
+      const response = await fetch(`https://api.github.com/users/${username}`);
+      if (!response.ok) {
+        throw new Error('Looks like we cant find the user');
+      }
+
+      const data = await response.json();
+      setUser(data);
     } catch (err) {
-      setError('Looks like we can’t find the user.');
-    } finally {
-      setLoading(false);
+      setError(err.message);
     }
   };
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={username}
-          onChange={handleInputChange}
-          placeholder="Enter GitHub username"
-        />
-        <button type="submit">Search</button>
-      </form>
+      <h1>GitHub User Search</h1>
+      <input
+        type="text"
+        placeholder="Enter GitHub username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <button onClick={handleSearch}>Search</button>
 
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
-      {userData && <UserCard user={userData} />}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      {user && (
+        <div>
+          <img src={user.avatar_url} alt="avatar" width="100" />
+          <p>{user.login}</p>
+        </div>
+      )}
     </div>
   );
 }
 
-export default SearchForm;
+export default Search;
