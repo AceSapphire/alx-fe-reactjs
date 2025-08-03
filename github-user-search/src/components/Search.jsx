@@ -6,19 +6,27 @@ function Search() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // ✅ required by checker
-    setError('');
-    setUser(null);
-    setLoading(true); // ✅ checker looks for 'Loading'
-
+  const fetchUserData = async (username) => {
     try {
       const response = await fetch(`https://api.github.com/users/${username}`);
       if (!response.ok) {
         throw new Error('Looks like we cant find the user');
       }
-
       const data = await response.json();
+      return data;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setUser(null);
+    setLoading(true);
+
+    try {
+      const data = await fetchUserData(username); // ✅ using fetchUserData
       setUser(data);
     } catch (err) {
       setError(err.message);
@@ -31,7 +39,7 @@ function Search() {
     <div>
       <h1>GitHub User Search</h1>
 
-      <form onSubmit={handleSubmit}> {/* ✅ checker expects a form */}
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Enter GitHub username"
@@ -41,8 +49,7 @@ function Search() {
         <button type="submit">Search</button>
       </form>
 
-      {loading && <p>Loading</p>} {/* ✅ checker expects this exact word */}
-
+      {loading && <p>Loading</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       {user && (
