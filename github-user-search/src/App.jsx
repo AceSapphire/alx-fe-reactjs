@@ -27,7 +27,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>GitHub User Search</h1>
+      <h1 className='text-3xl font-bold underline'>GitHub User Search</h1>
       <Search
         username={username}
         setUsername={setUsername}
