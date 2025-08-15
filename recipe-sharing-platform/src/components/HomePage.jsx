@@ -19,7 +19,7 @@ function Recipes() {
   return (
     <div className="flex justify-center items-center">
       <h1>Recipes</h1>
-      <ul className="grid grid-cols-4 gap-4">
+      <ul className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-4">
         {recipes.map((recipe) => (
           <li className="rounded-md shadow-md px-10 py-14 hover:shadow-2xl" key={recipe.id}>
             <h2 className="text-xl">{recipe.title}</h2>
