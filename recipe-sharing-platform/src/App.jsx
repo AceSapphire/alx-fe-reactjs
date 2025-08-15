@@ -1,8 +1,10 @@
-import React from 'react'
+import HomePage from "./components/HomePage"
 
 const App = () => {
   return (
-    <div className='text-blue-500'>App</div>
+    <div className='text-blue-500'>
+      <HomePage />
+    </div>
   )
 }
 
