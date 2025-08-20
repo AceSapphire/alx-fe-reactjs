@@ -1,30 +1,41 @@
+// src/components/PostsComponent.jsx
 import React from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 
-// Function to fetch posts
 const fetchPosts = async () => {
-  const response = await axios.get("https://jsonplaceholder.typicode.com/posts");
-  return response.data;
+  const { data } = await axios.get("https://jsonplaceholder.typicode.com/posts");
+  return data;
 };
 
 function PostsComponent() {
-  // React Query hook
-  const { data, error, isLoading, isError, refetch } = useQuery("posts", fetchPosts);
+  const {
+    data,
+    error,
+    isLoading,
+    isError,
+    refetch,
+    isFetching,
+  } = useQuery("posts", fetchPosts, {
+    // React Query caching options
+    cacheTime: 1000 * 60 * 5, // cache kept for 5 minutes
+    staleTime: 1000 * 60, // data considered fresh for 1 minute
+    refetchOnWindowFocus: false, // do not refetch when window refocuses
+    keepPreviousData: true, // keep previous data while fetching new
+  });
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p>Loading posts...</p>;
   if (isError) return <p>Error: {error.message}</p>;
 
   return (
     <div>
       <h2>Posts</h2>
-      <button onClick={() => refetch()}>Refetch Posts</button>
+      <button onClick={() => refetch()} disabled={isFetching}>
+        {isFetching ? "Refreshing..." : "Refetch Posts"}
+      </button>
       <ul>
-        {data.slice(0, 5).map((post) => (
-          <li key={post.id}>
-            <strong>{post.title}</strong>
-            <p>{post.body}</p>
-          </li>
+        {data.map((post) => (
+          <li key={post.id}>{post.title}</li>
         ))}
       </ul>
     </div>
