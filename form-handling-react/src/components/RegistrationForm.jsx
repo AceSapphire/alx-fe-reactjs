@@ -1,87 +1,77 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-function RegistrationForm() {
-  // State for inputs
+const RegistrationForm = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    let newErrors = {};
 
-    // Reset messages
-    setError("");
-    setSuccess("");
-
-    // Validation rules
-    if (username.trim().length < 3) {
-      setError("Username must be at least 3 characters long.");
-      return;
+    if (!username) {
+      newErrors.username = "Username is required";
+    }
+    if (!email) {
+      newErrors.email = "Email is required";
+    }
+    if (!password) {
+      newErrors.password = "Password is required";
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setError("Please enter a valid email address.");
-      return;
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length === 0) {
+      alert("Form submitted successfully!");
+      setUsername("");
+      setEmail("");
+      setPassword("");
     }
-
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters long.");
-      return;
-    }
-
-    // If valid
-    setSuccess("Registration successful!");
-    console.log("Form Submitted:", { username, email, password });
-
-    // Reset fields
-    setUsername("");
-    setEmail("");
-    setPassword("");
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        maxWidth: "400px",
-        margin: "20px auto",
-        display: "flex",
-        flexDirection: "column",
-        gap: "10px",
-      }}
-    >
-      <h2>User Registration (Validation Added)</h2>
+    <form onSubmit={handleSubmit} className="p-4 border rounded">
+      <h2 className="text-xl mb-4">Basic Registration Form</h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
+      <div className="mb-3">
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="border p-2 w-full"
+        />
+        {errors.username && <p className="text-red-500">{errors.username}</p>}
+      </div>
 
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
+      <div className="mb-3">
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="border p-2 w-full"
+        />
+        {errors.email && <p className="text-red-500">{errors.email}</p>}
+      </div>
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+      <div className="mb-3">
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="border p-2 w-full"
+        />
+        {errors.password && <p className="text-red-500">{errors.password}</p>}
+      </div>
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <button type="submit">Register</button>
+      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+        Register
+      </button>
     </form>
   );
-}
+};
 
 export default RegistrationForm;
